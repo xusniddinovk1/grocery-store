@@ -14,5 +14,5 @@ class FlashSale(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['book', 'start_time', 'end_time'], name='unique_flashsale_period')
+            models.UniqueConstraint(fields=['product', 'start_time', 'end_time'], name='unique_flashsale_period')
         ]
