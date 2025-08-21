@@ -28,7 +28,7 @@ class Order(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     phone_number = models.CharField(validators=[phone_regex], unique=True)
     status = models.CharField(max_length=20, choices=STATUS, default=PENDING)
-    is_paid = models.BooleanField(default=False)
+    is_paid = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def set_status(self, new_status):
@@ -48,10 +48,6 @@ class Order(models.Model):
     def __str__(self):
         return f'Order #{self.id} by {self.user}'
 
-    @property
-    def get_total(self):
-        return sum(item.get_total_price for item in self.items.all())
-
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
@@ -60,7 +56,3 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f'{self.product.title} x {self.quantity}'
-
-    @property
-    def get_total_price(self):
-        return self.product.get_price() * self.quantity
