@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.db import models
 from django.utils.timezone import now
 
@@ -29,7 +31,7 @@ class Product(models.Model):
     def get_discounted_price(self):
         flash_sale = self.get_active_flash_sale()
         if flash_sale:
-            discount = (self.price * flash_sale.discount_percentage) / 100
+            discount = (self.price * Decimal(flash_sale.discount_percentage)) / Decimal(100)
             return self.price - discount
         return self.price
 

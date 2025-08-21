@@ -21,7 +21,9 @@ class OrderSerializer(serializers.ModelSerializer):
         read_only_fields = ['user', 'total_price', 'created_at']
 
     def get_total_price(self, obj):
-        return sum([item.product.price * item.quantity for item in obj.items.all()])
+        # ❌ oldingi variant: item.product.price
+        # ✅ to‘g‘risi:
+        return sum([item.price * item.quantity for item in obj.items.all()])
 
     def create(self, validated_data):
         items_data = validated_data.pop('items')
@@ -32,14 +34,19 @@ class OrderSerializer(serializers.ModelSerializer):
             product = item_data['product']
             quantity = item_data['quantity']
 
-            if not Product.objects.filter(pk=product.pk).exists():
-                raise serializers.ValidationError({'product': f'Product with id {product.pk} does not exist'})
-
             if product.stock < quantity:
                 raise serializers.ValidationError(
-                    {'product': f'Product {product.title} has only {product.stock} in stock'})
+                    {'product': f'Product {product.title} has only {product.stock} in stock'}
+                )
 
-            OrderItem.objects.create(order=order, product=product, quantity=quantity)
+            # ✅ to‘g‘ri variant:
+            OrderItem.objects.create(
+                order=order,
+                product=product,
+                quantity=quantity,
+                price=product.get_discounted_price()  # chegirmali narxni yozib qo‘yamiz
+            )
+
             product.stock -= quantity
             product.save()
 
