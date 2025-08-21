@@ -26,7 +26,7 @@ class Order(models.Model):
     )
 
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    phone_number = models.CharField(validators=[phone_regex], unique=True)
+    phone_number = models.CharField(validators=[phone_regex])
     status = models.CharField(max_length=20, choices=STATUS, default=PENDING)
     is_paid = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
