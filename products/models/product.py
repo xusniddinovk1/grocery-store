@@ -23,6 +23,17 @@ class Product(models.Model):
     class Meta:
         ordering = ['title']
 
+    def get_price(self):
+        flash_sale = self.flashsale_set.filter(
+            start_time__lte=now(),
+            end_time__gte=now()
+        ).first()
+
+        if flash_sale:
+            discount = (self.price * flash_sale.discount_percentage) / 100
+            return self.price - discount
+        return self.price
+
     def get_active_flash_sale(self):
         return self.flashsale_set.filter(start_time__lte=now(), end_time__gte=now()).first()
 

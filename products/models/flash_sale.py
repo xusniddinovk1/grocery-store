@@ -10,7 +10,7 @@ class FlashSale(models.Model):
     end_time = models.DateTimeField()
 
     def is_active(self):
-        return self.start_time <= now <= self.end_time
+        return self.start_time <= now() <= self.end_time
 
     class Meta:
         constraints = [
