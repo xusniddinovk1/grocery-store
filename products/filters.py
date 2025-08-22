@@ -1,7 +1,5 @@
-from random import choice
-
 from django_filters import rest_framework as django_filters
-from .models import Product, Category, FlashSale, Order
+from .models import Product, Category, FlashSale
 
 
 class ProductFilter(django_filters.FilterSet):
