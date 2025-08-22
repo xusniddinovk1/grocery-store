@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from ..models import Order, OrderItem, Product
+from ..tasks import send_to_telegram
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
@@ -49,5 +50,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
             product.stock -= quantity
             product.save()
+
+            send_to_telegram(order)
 
         return order

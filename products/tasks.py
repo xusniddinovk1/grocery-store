@@ -12,9 +12,9 @@ def send_to_telegram(order):
 
     total = 0
     for item in order.items.all():
-        subtotal = item.quantity * item.book.price
+        subtotal = item.quantity * item.product.price
         total += subtotal
-        text += f"  • {item.book.title} — {item.quantity} × {item.book.price} = {subtotal} so‘m\n"
+        text += f"  • {item.product.title} — {item.quantity} × {item.product.price} = {subtotal} so‘m\n"
 
     text += f"\n💰 Umumiy: {total} so‘m"
 
