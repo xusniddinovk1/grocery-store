@@ -3,7 +3,7 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from ..filters import ProductFilter
+from ..filters import ProductFilter, CategoryFilter
 from ..serializers import CategorySerializer, ProductSerializer
 from ..models import Category, Product
 from ..permissions import IsAdminOrReadOnly
@@ -16,7 +16,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
     filter_backends = [django_filters.DjangoFilterBackend, filters.SearchFilter]
-    filterset_class = ProductFilter
+    filterset_class = CategoryFilter
 
     @swagger_auto_schema(manual_parameters=[
         openapi.Parameter('name', openapi.IN_QUERY, description='Kategoriya nomi',
@@ -38,8 +38,6 @@ class ProductViewSet(viewsets.ModelViewSet):
                           type=openapi.TYPE_NUMBER),
         openapi.Parameter('max_price', openapi.IN_QUERY, description="Narxdan kichik yoki teng",
                           type=openapi.TYPE_NUMBER),
-        openapi.Parameter('category', openapi.IN_QUERY, description="Kategoriya nomi (qisman)",
-                          type=openapi.TYPE_STRING),
     ])
     def list(self, request, *args, **kwargs):
         category = request.query_params.get('category', None)
