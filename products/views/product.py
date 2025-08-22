@@ -1,3 +1,5 @@
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
@@ -16,6 +18,13 @@ class CategoryViewSet(viewsets.ModelViewSet):
     filter_backends = [django_filters.DjangoFilterBackend, filters.SearchFilter]
     filterset_class = ProductFilter
 
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter('name', openapi.IN_QUERY, description='Kategoriya nomi',
+                          type=openapi.TYPE_STRING)
+    ])
+    def list(self, request, *args, **kwargs):
+        return super().list(request,*args, **kwargs)
+
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
@@ -24,6 +33,14 @@ class ProductViewSet(viewsets.ModelViewSet):
     filter_backends = [django_filters.DjangoFilterBackend, filters.SearchFilter]
     filterset_class = ProductFilter
 
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter('min_price', openapi.IN_QUERY, description="Narxdan katta yoki teng",
+                          type=openapi.TYPE_NUMBER),
+        openapi.Parameter('max_price', openapi.IN_QUERY, description="Narxdan kichik yoki teng",
+                          type=openapi.TYPE_NUMBER),
+        openapi.Parameter('category', openapi.IN_QUERY, description="Kategoriya nomi (qisman)",
+                          type=openapi.TYPE_STRING),
+    ])
     def list(self, request, *args, **kwargs):
         category = request.query_params.get('category', None)
         if category:

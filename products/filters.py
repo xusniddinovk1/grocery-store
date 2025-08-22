@@ -21,8 +21,8 @@ class CategoryFilter(django_filters.FilterSet):
 class FlashSaleFilter(django_filters.FilterSet):
     min_discount_percentage = django_filters.NumberFilter(field_name='discount_percentage', lookup_expr='gte')
     max_discount_percentage = django_filters.NumberFilter(field_name='discount_percentage', lookup_expr='lte')
-    book = django_filters.CharFilter(field_name='book__title', lookup_expr='icontains')
+    product = django_filters.CharFilter(field_name='product__title', lookup_expr='icontains')
 
     class Meta:
         model = FlashSale
-        fields = ['min_discount_percentage', 'max_discount_percentage', 'book']
+        fields = ['min_discount_percentage', 'max_discount_percentage', 'product']
