@@ -1,5 +1,5 @@
 from django_filters import rest_framework as django_filters
-from .models import Product, Category, FlashSale
+from .models import Product, Category, FlashSale, Comment
 
 
 class ProductFilter(django_filters.FilterSet):
@@ -26,6 +26,15 @@ class FlashSaleFilter(django_filters.FilterSet):
     class Meta:
         model = FlashSale
         fields = ['min_discount_percentage', 'max_discount_percentage', 'product']
+
+
+class CommentFilter(django_filters.FilterSet):
+    user = django_filters.NumberFilter(field_name='user__id')
+    product = django_filters.NumberFilter(field_name='product__id')
+
+    class Meta:
+        model = Comment
+        fields = ['user', 'product']
 
 # class OrderFilter(django_filters.FilterSet):
 #     status = django_filters.CharFilter(choices=Order.STATUS)
