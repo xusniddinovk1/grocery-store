@@ -4,8 +4,8 @@ from django.db import models
 
 
 class Comment(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, related_name='comments', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name='comments', on_delete=models.CASCADE)
     text = models.TextField()
     rating = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)

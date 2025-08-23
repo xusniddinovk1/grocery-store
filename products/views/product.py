@@ -1,5 +1,6 @@
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
@@ -23,7 +24,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
                           type=openapi.TYPE_STRING)
     ])
     def list(self, request, *args, **kwargs):
-        return super().list(request,*args, **kwargs)
+        return super().list(request, *args, **kwargs)
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -54,3 +55,14 @@ class ProductViewSet(viewsets.ModelViewSet):
             'product': serializer.data,
             'related_product': related_serializer.data
         })
+
+    @action(detail=True, methods=['get'])
+    def avg_rating(self, request, pk=None):
+        product = self.get_object()
+        comments = product.comments.all()
+
+        if comments.count() == 0:
+            return Response({'average_rating': 'No comments yet'})
+
+        avg_rating = sum([comment.rating for comment in comments]) / comments.count()
+        return Response({'average_rating': round(avg_rating, 2)})
