@@ -102,7 +102,8 @@ REST_FRAMEWORK = {
 
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
-    ]
+    ],
+    'EXCEPTION_HANDLER': 'products.api.exception_handler.custom_exception_handler',
 }
 
 SIMPLE_JWT = {
